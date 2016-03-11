@@ -74,9 +74,22 @@ class Sheep_Debug_ModelController extends Sheep_Debug_Controller_Front_Action
 
 
     /**
+     * Returns stack trace for specified query
+     */
+    public function stacktraceSqlAction()
+    {
+        if ($query = $this->_initQuery()) {
+            $helper = Mage::helper('sheep_debug');
+            $stripZendPath = $helper->canStripZendDbTrace() ? 'lib/Zend/Db/Adapter' : '';
+            $html = '<pre>' . Mage::helper('sheep_debug')->formatStacktrace($query->getStackTrace(), $stripZendPath) . '</pre>';
+            $this->getResponse()->setBody($html);
+        }
+    }
+
+    /**
      * Returns query referenced in request parameters
      *
-     * @return Zend_Db_Profiler_Query
+     * @return Sheep_Debug_Model_Query
      */
     protected function _initQuery()
     {

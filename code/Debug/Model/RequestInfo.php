@@ -430,7 +430,7 @@ class Sheep_Debug_Model_RequestInfo extends Mage_Core_Model_Abstract
         $profiler = Mage::helper('sheep_debug')->getSqlProfiler();
         if ($profiler->getEnabled()) {
             /** @var Zend_Db_Profiler_Query[] $queries */
-            $this->queries = $profiler->getQueryProfiles() ?: array();
+            $this->queries = $profiler->getAllQueriesWithStackTrace() ?: array();
             $this->setQueryCount($profiler->getTotalNumQueries());
             $this->setQueryTime($profiler->getTotalElapsedSecs());
         }

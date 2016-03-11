@@ -168,12 +168,15 @@ class Sheep_Debug_Model_Observer
      */
     public function onControllerFrontInitBefore()
     {
-        // TODO: register custom profiler
+        // TODO: move this logic to their own
+
+        // TODO: Copy existing executed queries even if we lost their stacktrace
+
         /** @var Magento_Db_Adapter_Pdo_Mysql $connection */
         $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
         $connection->setProfiler(array(
             'enabled' => true,
-            'class' => 'Sheep_Debug_Model_Db_Profiler'
+            'class'   => 'Sheep_Debug_Model_Db_Profiler'
         ));
 
         $this->startProfiling();
