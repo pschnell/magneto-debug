@@ -47,6 +47,17 @@ modman update magneto-debug
 ```
 - Flush Magento's cache
 
+
+## Using composer
+
+Lately, I've been more into composer and thanks to these project https://github.com/Cotya/magento-composer-installer you can use it for your Magento 1.x websites.
+
+```
+# Add package as requirement to composer.json
+composer require madalinoprea/magneto-debug
+# Clear cache and voila..
+```
+
 # Compatibility
 
 Extension is (hopefully) successfully unit tested against PHP 5.4, PHP 5.5 and Magento CE 1.9, Magento CE 1.8, Magento CE 1.7 and 
@@ -83,6 +94,8 @@ Use [issue tracker on GitHub](https://github.com/madalinoprea/magneto-debug/issu
     Eliminate a possible cache problem by disabling all caches. Try to determine if there are any customizations that have removed `before_body_end`.
 
 # Change Log
+- **1.6.1**
+   - Quick fix release for recursive block rendering #68 	
 - **1.6.0**
     - Adds support for unexpected block rendering used by some common extension #66
     - Unit tests coverage improvements

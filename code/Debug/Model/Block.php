@@ -53,7 +53,11 @@ class Sheep_Debug_Model_Block
     public function startRendering(Mage_Core_Block_Abstract $block)
     {
         if ($this->isRendering) {
-            throw new Exception("Block {$this->name} is already marked as rendered");
+            // Recursive block instances with same name is used - we don't update render start time
+            $this->renderedCount++;
+
+            Mage::log("Recursive block rendering {$this->getName()}", Zend_Log::DEBUG);
+            return;
         }
 
         // Re-init data from block (some extension might update dynamically block's template)
