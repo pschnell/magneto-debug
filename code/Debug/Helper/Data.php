@@ -15,6 +15,9 @@ class Sheep_Debug_Helper_Data extends Mage_Core_Helper_Data
     const DEBUG_OPTION_PERSIST_EXPIRATION_PATH = 'sheep_debug/options/persist_expiration';
     const DEBUG_OPTION_FORCE_VARIEN_PROFILE_PATH = 'sheep_debug/options/force_varien_profile';
     const DEBUG_OPTION_USE_STORE_LOCALE = 'sheep_debug/options/use_store_locale';
+    const DEBUG_OPTION_CAPTURE_SQL_STACKTRACE = 'sheep_debug/options/capture_sql_stacktrace';
+    const DEBUG_OPTION_STRIP_ZEND_DB_TRACES = 'sheep_debug/options/strip_zend_db_traces';
+    const DEBUG_OPTION_TRIM_MAGENTO_DIR = 'sheep_debug/options/trim_magento_basedir';
 
 
     /**
@@ -264,13 +267,17 @@ class Sheep_Debug_Helper_Data extends Mage_Core_Helper_Data
      * @param string $stripFilepath
      * @return string
      */
-    public function formatStacktrace(array $trace, $stripFilepath='')
+    public function formatStacktrace(array $trace, $stripFilepath = '', $trimPath='')
     {
         $out = '';
         foreach ($trace as $index => $row) {
 
             if ($stripFilepath && isset($row['file']) && strpos($row['file'], $stripFilepath) !== false) {
                 continue;
+            }
+
+            if ($trimPath) {
+                $row['file'] = str_replace($trimPath, '', $row['file']);
             }
 
             // sometimes there is undefined index 'file'
@@ -491,16 +498,38 @@ class Sheep_Debug_Helper_Data extends Mage_Core_Helper_Data
     }
 
 
-    // TODO: Add real configuration
+    /**
+     * Checks if we want to capture stack trace for SQL
+     *
+     * @return bool
+     */
     public function canEnableSqlStacktrace()
     {
-        return true;
+        return (bool)Mage::getStoreConfig(self::DEBUG_OPTION_CAPTURE_SQL_STACKTRACE);
     }
 
+
+    /**
+     * Checks if we should not display traces related to Zend Db files
+     *
+     * @return bool
+     */
     public function canStripZendDbTrace()
     {
-        return true;
+        return (bool)Mage::getStoreConfig(self::DEBUG_OPTION_STRIP_ZEND_DB_TRACES);
     }
+
+
+    /**
+     * Checks if we can remove Magento base dir from stack trace file paths
+     *
+     * @return bool
+     */
+    public function canTrimMagentoBaseDir()
+    {
+        return (bool)Mage::getStoreConfig(self::DEBUG_OPTION_TRIM_MAGENTO_DIR);
+    }
+
 
     /**
      * Checks if we need to translate or format extension content based on

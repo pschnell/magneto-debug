@@ -161,6 +161,7 @@ class Sheep_Debug_Helper_Url extends Mage_Core_Helper_Data
     /**
      * Returns url that returns SQL stack trace
      *
+     * @see \Sheep_Debug_ModelController::stacktraceSqlAction
      * @param string $token
      * @param int $index
      * @return string

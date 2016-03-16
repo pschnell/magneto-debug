@@ -4,6 +4,28 @@ class Sheep_Debug_Model_Db_Profiler extends Zend_Db_Profiler
 {
     protected $stackTraces = array();
 
+
+    /**
+     * Responsible to copy queries from current profiler and set this instance sql profiler
+     *
+     * @throws Zend_Db_Profiler_Exception
+     */
+    public function replaceProfiler()
+    {
+        /** @var Magento_Db_Adapter_Pdo_Mysql $connection */
+        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $currentProfile = $connection->getProfiler();
+
+        if ($currentProfile) {
+            // Copy queries
+            $this->_queryProfiles = $currentProfile->_queryProfiles;
+        }
+
+        $this->setEnabled(true);
+        $connection->setProfiler($this);
+    }
+
+
     /**
      * @param $queryId
      * @return string
@@ -16,6 +38,8 @@ class Sheep_Debug_Model_Db_Profiler extends Zend_Db_Profiler
 
 
     /**
+     * Returns stack trace as array
+     *
      * @return string
      */
     public function getStackTrace()
@@ -24,6 +48,13 @@ class Sheep_Debug_Model_Db_Profiler extends Zend_Db_Profiler
         return array_slice($trace, 2);
     }
 
+
+    /**
+     * Calls parent implementation and saves stack trace
+     *
+     * @param int $queryId
+     * @return string
+     */
     public function queryEnd($queryId)
     {
         $result = $this->parentQueryEnd($queryId);
@@ -35,7 +66,9 @@ class Sheep_Debug_Model_Db_Profiler extends Zend_Db_Profiler
 
 
     /**
-     * @return array
+     * Returns an array of SQL queries
+     *
+     * @return Sheep_Debug_Model_Query[]
      */
     public function getAllQueriesWithStackTrace()
     {

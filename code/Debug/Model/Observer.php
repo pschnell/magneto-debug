@@ -96,6 +96,12 @@ class Sheep_Debug_Model_Observer
         if (Mage::helper('sheep_debug')->canEnableVarienProfiler()) {
             Varien_Profiler::enable();
         }
+
+        if (Mage::helper('sheep_debug')->canEnableSqlStacktrace()) {
+            $stackTraceProfiler = Mage::getModel('sheep_debug/db_profiler');
+            $stackTraceProfiler->replaceProfiler();
+        }
+
     }
 
 
@@ -168,17 +174,6 @@ class Sheep_Debug_Model_Observer
      */
     public function onControllerFrontInitBefore()
     {
-        // TODO: move this logic to their own
-
-        // TODO: Copy existing executed queries even if we lost their stacktrace
-
-        /** @var Magento_Db_Adapter_Pdo_Mysql $connection */
-        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-        $connection->setProfiler(array(
-            'enabled' => true,
-            'class'   => 'Sheep_Debug_Model_Db_Profiler'
-        ));
-
         $this->startProfiling();
     }
 

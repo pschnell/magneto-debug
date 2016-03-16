@@ -81,7 +81,8 @@ class Sheep_Debug_ModelController extends Sheep_Debug_Controller_Front_Action
         if ($query = $this->_initQuery()) {
             $helper = Mage::helper('sheep_debug');
             $stripZendPath = $helper->canStripZendDbTrace() ? 'lib/Zend/Db/Adapter' : '';
-            $html = '<pre>' . Mage::helper('sheep_debug')->formatStacktrace($query->getStackTrace(), $stripZendPath) . '</pre>';
+            $trimPath = $helper->canTrimMagentoBaseDir() ? Mage::getBaseDir() . DS : '';
+            $html = '<pre>' . Mage::helper('sheep_debug')->formatStacktrace($query->getStackTrace(), $stripZendPath, $trimPath) . '</pre>';
             $this->getResponse()->setBody($html);
         }
     }
