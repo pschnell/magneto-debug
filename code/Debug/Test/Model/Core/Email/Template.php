@@ -184,11 +184,14 @@ class Sheep_Debug_Test_Model_Core_Email_Template extends EcomDev_PHPUnit_Test_Ca
     public function testGetPartDecodedContent()
     {
         // this condition doesn't seem right to live in a test
-        $zendWithGetRawContent = Zend_Version::compareVersion('1.12.0') >= 0;
+        $zendWithGetRawContent = Zend_Version::compareVersion('1.12.0') <= 0;
 
-        $mimePart = $this->getMock('Zend_Mime_Part', array('getRawContent', 'getContent'), array(), '', false);
-        $mimePart->expects($this->any())->method('getRawContent')->willReturn('raw content');
-        $mimePart->expects($this->any())->method('getContent')->willReturn('content');
+        $mimePart = $this->getMock('Zend_Mime_Part', array(), array(), '', false);
+        if ($zendWithGetRawContent) {
+            $mimePart->expects($this->any())->method('getRawContent')->willReturn('raw content');
+        } else {
+            $mimePart->expects($this->any())->method('getContent')->willReturn('content');
+        }
 
         $model = $this->getModelMock('core/email_template', array('isPlain'));
         $actual = $model->getPartDecodedContent($mimePart);
