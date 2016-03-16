@@ -21,7 +21,7 @@ class Sheep_Debug_Model_Db_Profiler extends Zend_Db_Profiler
             $this->_queryProfiles = $currentProfile->_queryProfiles;
         }
 
-        $this->setEnabled(true);
+        $this->setEnabled($currentProfile->getEnabled());
         $connection->setProfiler($this);
     }
 
@@ -93,6 +93,15 @@ class Sheep_Debug_Model_Db_Profiler extends Zend_Db_Profiler
     public function setCaptureStacktraces($captureStacktraces)
     {
         $this->captureStacktraces = $captureStacktraces;
+    }
+
+
+    /**
+     * @return boolean
+     */
+    public function isCaptureStacktraces()
+    {
+        return $this->captureStacktraces;
     }
 
 }
