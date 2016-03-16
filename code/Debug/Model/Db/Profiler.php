@@ -3,7 +3,7 @@
 class Sheep_Debug_Model_Db_Profiler extends Zend_Db_Profiler
 {
     protected $stackTraces = array();
-
+    protected $captureStacktraces = false;
 
     /**
      * Responsible to copy queries from current profiler and set this instance sql profiler
@@ -59,7 +59,9 @@ class Sheep_Debug_Model_Db_Profiler extends Zend_Db_Profiler
     {
         $result = $this->parentQueryEnd($queryId);
 
-        $this->stackTraces[$queryId] = $this->getStackTrace();
+        if ($this->captureStacktraces) {
+            $this->stackTraces[$queryId] = $this->getStackTrace();
+        }
 
         return $result;
     }
@@ -70,7 +72,7 @@ class Sheep_Debug_Model_Db_Profiler extends Zend_Db_Profiler
      *
      * @return Sheep_Debug_Model_Query[]
      */
-    public function getAllQueriesWithStackTrace()
+    public function getQueryModels()
     {
         $queries  = array();
         foreach ($this->_queryProfiles as $queryId => $queryProfile) {
@@ -82,6 +84,15 @@ class Sheep_Debug_Model_Db_Profiler extends Zend_Db_Profiler
         }
 
         return $queries;
+    }
+
+
+    /**
+     * @param boolean $captureStacktraces
+     */
+    public function setCaptureStacktraces($captureStacktraces)
+    {
+        $this->captureStacktraces = $captureStacktraces;
     }
 
 }

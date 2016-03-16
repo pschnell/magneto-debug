@@ -23,7 +23,7 @@ class Sheep_Debug_Model_Query
      * @param Zend_Db_Profiler_Query $profilerQuery
      * @param string                 $stacktrace
      */
-    public function init(Zend_Db_Profiler_Query $profilerQuery, $stacktrace)
+    public function init(Zend_Db_Profiler_Query $profilerQuery, $stacktrace = '')
     {
         $this->queryType = $profilerQuery->getQueryType();
         $this->query = $profilerQuery->getQuery();
