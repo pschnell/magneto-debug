@@ -14,6 +14,7 @@ class Sheep_Debug_Helper_Data extends Mage_Core_Helper_Data
     const DEBUG_OPTION_PERSIST_PATH = 'sheep_debug/options/persist';
     const DEBUG_OPTION_PERSIST_EXPIRATION_PATH = 'sheep_debug/options/persist_expiration';
     const DEBUG_OPTION_FORCE_VARIEN_PROFILE_PATH = 'sheep_debug/options/force_varien_profile';
+    const DEBUG_OPTION_USE_STORE_LOCALE = 'sheep_debug/options/use_store_locale';
 
 
     /**
@@ -500,6 +501,18 @@ class Sheep_Debug_Helper_Data extends Mage_Core_Helper_Data
     {
         return true;
     }
+
+    /**
+     * Checks if we need to translate or format extension content based on
+     * store locale
+     *
+     * @return bool
+     */
+    public function useStoreLocale()
+    {
+        return (bool)Mage::getStoreConfig(self::DEBUG_OPTION_USE_STORE_LOCALE);
+    }
+
 
     /**
      * Returns Magento configuration instance
